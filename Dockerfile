@@ -25,7 +25,7 @@ RUN . /root/.gvm/scripts/gvm && \
 
 ENV WATCHER_VERSION 0.2.4
 
-ADD https://github.com/canthefason/go-watcher/releases/download/v${WATCHER_VERSION}/watcher-${WATCHER_VERSION}-linux-amd64 /root/.gvm/bin/watcher
+ADD https://github.com/vterdunov/go-watcher/releases/download/v${WATCHER_VERSION}/watcher-${WATCHER_VERSION}-linux-amd64 /root/.gvm/bin/watcher
 
 RUN chmod +x /root/.gvm/bin/watcher
 

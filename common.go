@@ -1,9 +1,9 @@
 package watcher
 
 import (
+	"flag"
 	"fmt"
 	"io"
-	"log"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -14,7 +14,12 @@ import (
 // Binary name used for built package
 const binaryName = "watcher"
 
-var watcherFlags = []string{"run", "watch", "watch-vendor"}
+var (
+	runFlag   = flag.String("run", "", "Path to run")
+	watchFlag = flag.String("watch", "", "Watch directory")
+	// watchVendorFlag = flag.Bool("watch-vendor", false, "Watch vendor")
+	buildArgsFlag = flag.String("build-args", "-i", "Build arguments. -o already included.")
+)
 
 // Params is used for keeping go-watcher and application flag parameters
 type Params struct {
@@ -22,6 +27,8 @@ type Params struct {
 	Package []string
 	// Go-Watcher parameters
 	Watcher map[string]string
+
+	BuildArgs string
 }
 
 // NewParams creates a new Params instance
@@ -35,12 +42,6 @@ func NewParams() *Params {
 // Get returns the watcher parameter with the given name
 func (p *Params) Get(name string) string {
 	return p.Watcher[name]
-}
-
-func (p *Params) cloneRunFlag() {
-	if p.Watcher["watch"] == "" && p.Watcher["run"] != "" {
-		p.Watcher["watch"] = p.Watcher["run"]
-	}
 }
 
 func (p *Params) packagePath() string {
@@ -73,6 +74,9 @@ func generateBinaryPrefix() string {
 // runCommand runs the command with given name and arguments. It copies the
 // logs to standard output
 func runCommand(name string, args ...string) (*exec.Cmd, error) {
+	fmt.Println("================")
+	fmt.Println(args)
+	fmt.Println("================")
 	cmd := exec.Command(name, args...)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
@@ -97,35 +101,12 @@ func runCommand(name string, args ...string) (*exec.Cmd, error) {
 // ParseArgs extracts the application parameters from args and returns
 // Params instance with separated watcher and application parameters
 func ParseArgs(args []string) *Params {
+	flag.Parse()
 
 	params := NewParams()
-
-	// remove the command argument
-	args = args[1:len(args)]
-
-	for i := 0; i < len(args); i++ {
-		arg := args[i]
-		arg = stripDash(arg)
-
-		if existIn(arg, watcherFlags) {
-			// used for fetching the value of the given parameter
-			if len(args) <= i+1 {
-				log.Fatalf("missing parameter value: %s", arg)
-			}
-
-			if strings.HasPrefix(args[i+1], "-") {
-				log.Fatalf("missing parameter value: %s", arg)
-			}
-
-			params.Watcher[arg] = args[i+1]
-			i++
-			continue
-		}
-
-		params.Package = append(params.Package, args[i])
-	}
-
-	params.cloneRunFlag()
+	params.Watcher["watch"] = *watchFlag
+	params.Watcher["run"] = *runFlag
+	params.BuildArgs = *buildArgsFlag
 
 	return params
 }

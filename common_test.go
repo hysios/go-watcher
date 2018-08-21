@@ -17,7 +17,7 @@ func TestParamsClone(t *testing.T) {
 	params := NewParams()
 	params.Watcher["run"] = "statler"
 
-	params.cloneRunFlag()
+	// params.cloneRunFlag()
 	watch := params.Get("watch")
 	if watch != "statler" {
 		t.Error("Expected statler but got %s when watch param is not set", watch)
@@ -25,7 +25,7 @@ func TestParamsClone(t *testing.T) {
 
 	params.Watcher["watch"] = "waldorf"
 
-	params.cloneRunFlag()
+	// params.cloneRunFlag()
 
 	watch = params.Get("watch")
 	if watch != "waldorf" {

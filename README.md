@@ -1,4 +1,4 @@
-Watcher [![GoDoc](https://godoc.org/github.com/canthefason/go-watcher?status.svg)](https://godoc.org/github.com/canthefason/go-watcher) [![Build Status](https://travis-ci.org/canthefason/go-watcher.svg?branch=master)](https://travis-ci.org/canthefason/go-watcher)
+Watcher [![GoDoc](https://godoc.org/github.com/vterdunov/go-watcher?status.svg)](https://godoc.org/github.com/vterdunov/go-watcher) [![Build Status](https://travis-ci.org/canthefason/go-watcher.svg?branch=master)](https://travis-ci.org/canthefason/go-watcher)
 =======
 
 Watcher is a command line tool inspired by [fresh](https://github.com/pilu/fresh) and used for watching .go file changes, and restarting the app in case of an update/delete/add operation.
@@ -9,11 +9,11 @@ Most of the existing file watchers have a configuration burden, and even though 
 
   Get the package with:
 
-  `go get github.com/canthefason/go-watcher`
+  `go get github.com/vterdunov/go-watcher`
 
   Install the binary under go/bin folder:
 
-  `go install github.com/canthefason/go-watcher/cmd/watcher`
+  `go install github.com/vterdunov/go-watcher/cmd/watcher`
 
   After this step, please make sure that your go/bin folder is appended to PATH environment variable.
 
@@ -51,7 +51,7 @@ Since Globs and some optional folder arrays will make it harder to configure, we
 
 ## Watcher in Docker
 
-If you want to run Watcher in a containerized local environment, you can achieve this by using [canthefason/go-watcher](https://hub.docker.com/r/canthefason/go-watcher/) image in Docker Hub. There is an example project under [/docker-example](https://github.com/canthefason/go-watcher/tree/dockerfile-gvm/docker-examples) directoy. Let's try to dockerize this example code first.
+If you want to run Watcher in a containerized local environment, you can achieve this by using [canthefason/go-watcher](https://hub.docker.com/r/canthefason/go-watcher/) image in Docker Hub. There is an example project under [/docker-example](https://github.com/vterdunov/go-watcher/tree/dockerfile-gvm/docker-examples) directoy. Let's try to dockerize this example code first.
 
 In our example, we are creating a server that listens to port 7000 and responds to all clients with "watcher is running" string. The most essential thing to run your code in Docker is, mounting your project volume to a container. In the containerized Watcher, our GOPATH is set to /go directory by default, so you need to mount your project to this GOPATH.
 
@@ -77,5 +77,3 @@ https://codereview.appspot.com/22020045
 ## License
 
 The MIT License (MIT) - see LICENSE.md for more details
-
-
