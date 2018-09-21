@@ -8,15 +8,14 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 
 	fsnotify "gopkg.in/fsnotify.v1"
 )
 
-// GoPath not set error
-var ErrPathNotSet = errors.New("gopath not set")
+// ErrPathNotSet GOPTATH not set error
+var ErrPathNotSet = errors.New("GOPTATH not set")
 
 var watchedFileExt = []string{".go", ".tmpl", ".tpl", ".html"}
 
@@ -34,32 +33,23 @@ type Watcher struct {
 
 // MustRegisterWatcher creates a new Watcher and starts listening to
 // given folders
-func MustRegisterWatcher(params *Params) *Watcher {
-	watchVendorStr := params.Get("watch-vendor")
-	var watchVendor bool
-	var err error
-	if watchVendorStr != "" {
-		watchVendor, err = strconv.ParseBool(watchVendorStr)
-		if err != nil {
-			log.Println("Wrong watch-vendor value: %s (default=false)", watchVendorStr)
-		}
-	}
-
-	w := &Watcher{
-		update:      make(chan struct{}),
-		rootdir:     params.Get("watch"),
-		watchVendor: watchVendor,
-	}
-
-	w.watcher, err = fsnotify.NewWatcher()
+func MustRegisterWatcher(params *Params) (*Watcher, error) {
+	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		log.Fatalf("Could not register watcher: %s", err)
+		return nil, err
+	}
+
+	w := Watcher{
+		rootdir:     params.RootDir,
+		watcher:     watcher,
+		watchVendor: params.WatchVendor,
+		update:      make(chan struct{}),
 	}
 
 	// add folders that will be watched
 	w.watchFolders()
 
-	return w
+	return &w, nil
 }
 
 // Watch listens file updates, and sends signal to

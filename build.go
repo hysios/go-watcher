@@ -36,7 +36,7 @@ func (b *Builder) Build(p *Params) {
 		pkg := p.packagePath()
 
 		log.Println("build started")
-		color.Cyan("Building %s...\n", pkg)
+		color.Cyan("Building %s with args: %s\n", pkg, p.BuildArgs)
 
 		// build package
 		cmd, err := runCommand("go", "build", p.BuildArgs, "-o", fileName, pkg)
@@ -46,8 +46,8 @@ func (b *Builder) Build(p *Params) {
 		}
 
 		if err := cmd.Wait(); err != nil {
-			if err := interpretError(err); err != nil {
-				color.Red("An error occurred while building: %s", err)
+			if intErr := interpretError(err); intErr != nil {
+				color.Red("An error occurred while building: %s", intErr)
 			} else {
 				color.Red("A build error occurred. Please update your code...")
 			}
@@ -62,7 +62,7 @@ func (b *Builder) Build(p *Params) {
 }
 
 func (b *Builder) registerSignalHandler() {
-	signals := make(chan os.Signal)
+	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	<-signals
 	b.watcher.Close()

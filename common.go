@@ -15,37 +15,25 @@ import (
 const binaryName = "watcher"
 
 var (
-	runFlag   = flag.String("run", "", "Path to run")
-	watchFlag = flag.String("watch", "", "Watch directory")
-	// watchVendorFlag = flag.Bool("watch-vendor", false, "Watch vendor")
-	buildArgsFlag = flag.String("build-args", "-i", "Build arguments. -o already included.")
+	runFlag         = flag.String("run", "", "Path to run")
+	watchFlag       = flag.String("watch", "", "Watch package")
+	watchVendorFlag = flag.Bool("watch-vendor", false, "Watch vendor")
+	buildArgsFlag   = flag.String("build-args", "", "Build arguments. -o already included.")
 )
 
 // Params is used for keeping go-watcher and application flag parameters
 type Params struct {
-	// Package parameters
-	Package []string
-	// Go-Watcher parameters
-	Watcher map[string]string
+	WatchVendor bool
+
+	RootDir string
+
+	Run string
 
 	BuildArgs string
 }
 
-// NewParams creates a new Params instance
-func NewParams() *Params {
-	return &Params{
-		Package: make([]string, 0),
-		Watcher: make(map[string]string),
-	}
-}
-
-// Get returns the watcher parameter with the given name
-func (p *Params) Get(name string) string {
-	return p.Watcher[name]
-}
-
 func (p *Params) packagePath() string {
-	run := p.Get("run")
+	run := p.Run
 	if run != "" {
 		return run
 	}
@@ -74,9 +62,6 @@ func generateBinaryPrefix() string {
 // runCommand runs the command with given name and arguments. It copies the
 // logs to standard output
 func runCommand(name string, args ...string) (*exec.Cmd, error) {
-	fmt.Println("================")
-	fmt.Println(args)
-	fmt.Println("================")
 	cmd := exec.Command(name, args...)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
@@ -103,26 +88,14 @@ func runCommand(name string, args ...string) (*exec.Cmd, error) {
 func ParseArgs(args []string) *Params {
 	flag.Parse()
 
-	params := NewParams()
-	params.Watcher["watch"] = *watchFlag
-	params.Watcher["run"] = *runFlag
+	params := Params{}
+
+	params.RootDir = *watchFlag
+	params.Run = *runFlag
+	params.WatchVendor = *watchVendorFlag
 	params.BuildArgs = *buildArgsFlag
 
-	return params
-}
-
-// stripDash removes the both single and double dash chars and returns
-// the actual parameter name
-func stripDash(arg string) string {
-	if len(arg) > 1 {
-		if arg[1] == '-' {
-			return arg[2:]
-		} else if arg[0] == '-' {
-			return arg[1:]
-		}
-	}
-
-	return arg
+	return &params
 }
 
 func existIn(search string, in []string) bool {

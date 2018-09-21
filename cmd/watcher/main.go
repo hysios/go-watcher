@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"github.com/vterdunov/go-watcher"
@@ -9,7 +10,10 @@ import (
 func main() {
 	params := watcher.ParseArgs(os.Args)
 
-	w := watcher.MustRegisterWatcher(params)
+	w, err := watcher.MustRegisterWatcher(params)
+	if err != nil {
+		log.Fatalf("Could not register watcher: %s", err)
+	}
 
 	r := watcher.NewRunner()
 
