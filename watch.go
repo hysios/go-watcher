@@ -29,6 +29,7 @@ type Watcher struct {
 	watchVendor bool
 	// when a file gets changed a message is sent to the update channel
 	update chan struct{}
+	watchChmod bool
 }
 
 // MustRegisterWatcher creates a new Watcher and starts listening to
@@ -43,6 +44,7 @@ func MustRegisterWatcher(params *Params) (*Watcher, error) {
 		rootdir:     params.RootDir,
 		watcher:     watcher,
 		watchVendor: params.WatchVendor,
+		watchChmod:  params.WatchChmod,
 		update:      make(chan struct{}),
 	}
 
@@ -61,7 +63,7 @@ func (w *Watcher) Watch() {
 		select {
 		case event := <-w.watcher.Events:
 			// discard chmod events
-			if event.Op&fsnotify.Chmod != fsnotify.Chmod {
+			if w.watchChmod || event.Op&fsnotify.Chmod != fsnotify.Chmod {
 				// test files do not need a rebuild
 				if isTestFile(event.Name) {
 					continue
