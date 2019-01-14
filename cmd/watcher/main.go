@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/vterdunov/go-watcher"
+	"github.com/daforester/go-watcher"
 )
 
 func main() {
