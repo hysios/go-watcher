@@ -49,6 +49,9 @@ For the cases where your main function is in another directory other than the de
 ##### Vendor directory
 Since Globs and some optional folder arrays will make it harder to configure, we are not planning to have support for a configurable watched folder structure. Only configuration we have here is, by default we have excluded vendor/ folder from watched directories. If your intention is making some changes in place, you can set -watch-vendor flag as "true", and start watching vendor directory.
 
+##### Permissions
+Normally permission changes on files are ignored, on windows some utilities use permission changes to signal file changes to docker containers. Use -watch-chmod to watch for permission changes.
+
 ## Watcher in Docker
 
 If you want to run Watcher in a containerized local environment, you can achieve this by using [canthefason/go-watcher](https://hub.docker.com/r/canthefason/go-watcher/) image in Docker Hub. There is an example project under [/docker-example](https://github.com/vterdunov/go-watcher/tree/dockerfile-gvm/docker-examples) directoy. Let's try to dockerize this example code first.
