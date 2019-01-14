@@ -1,10 +1,9 @@
 package main
 
 import (
+	"github.com/daforester/go-watcher"
 	"log"
 	"os"
-
-	"github.com/daforester/go-watcher"
 )
 
 func main() {
