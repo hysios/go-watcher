@@ -19,6 +19,7 @@ var (
 	watchFlag       = flag.String("watch", "", "Watch package")
 	watchVendorFlag = flag.Bool("watch-vendor", false, "Watch vendor")
 	buildArgsFlag   = flag.String("build-args", "", "Build arguments. -o already included.")
+	chmodFlag       = flag.Bool("watch-chmod", false, "watch file permission changes")
 )
 
 // Params is used for keeping go-watcher and application flag parameters
@@ -30,6 +31,8 @@ type Params struct {
 	Run string
 
 	BuildArgs string
+
+	WatchChmod bool
 }
 
 func (p *Params) packagePath() string {
@@ -94,6 +97,7 @@ func ParseArgs(args []string) *Params {
 	params.Run = *runFlag
 	params.WatchVendor = *watchVendorFlag
 	params.BuildArgs = *buildArgsFlag
+	params.WatchChmod = *chmodFlag
 
 	return &params
 }
