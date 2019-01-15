@@ -5,12 +5,12 @@
 package watcher
 
 import (
+	"github.com/fatih/color"
 	"log"
 	"os/exec"
+	"strconv"
 	"syscall"
 	"time"
-
-	"github.com/fatih/color"
 )
 
 // Runner listens for the change events and depending on that kills
@@ -18,14 +18,26 @@ import (
 type Runner struct {
 	start chan string
 	done  chan struct{}
+	softkill bool
 	cmd   *exec.Cmd
 }
 
 // NewRunner creates a new Runner instance and returns its pointer
-func NewRunner() *Runner {
+func NewRunner(params *Params) *Runner {
+	softKillStr := params.Get("softkill")
+	var softKill bool
+	var err error
+	if softKillStr != "" {
+		softKill, err = strconv.ParseBool(softKillStr)
+		if err != nil {
+			log.Println("Wrong softkill value: %s (default=false)", softKillStr)
+		}
+	}
+
 	return &Runner{
 		start: make(chan string),
 		done:  make(chan struct{}),
+		softkill: softKill,
 	}
 }
 
@@ -65,20 +77,24 @@ func (r *Runner) restart(fileName string) {
 
 func (r *Runner) kill(cmd *exec.Cmd) {
 	if cmd != nil {
-		_ = cmd.Process.Signal(syscall.SIGINT)
+		if r.softkill {
+			_ = cmd.Process.Signal(syscall.SIGINT)
 
-		didExit := make(chan struct{})
-		go func() {
-			select {
+			didExit := make(chan struct{})
+			go func() {
+				select {
 				case <-didExit:
 				case <-time.After(5 * time.Second):
 					_ = cmd.Process.Kill()
-			}
-		}()
+				}
+			}()
 
-		state, err := cmd.Process.Wait()
-		if err == nil && state.Exited() {
-			close(didExit)
+			state, err := cmd.Process.Wait()
+			if err == nil && state.Exited() {
+				close(didExit)
+			}
+		} else {
+			_ = cmd.Process.Kill()
 		}
 	}
 }
