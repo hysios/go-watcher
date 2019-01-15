@@ -1,5 +1,5 @@
 FROM buildpack-deps:jessie-scm
-MAINTAINER Can Yucel "can.yucel@gmail.com"
+MAINTAINER David Forester "davidforester@hotmail.com"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		g++ \
@@ -12,20 +12,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 SHELL ["/bin/bash", "-c"]
 
-ENV GO_VERSION 1.7
+ENV GO_VERSION 1.11
 
 RUN curl -s -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash
 
 RUN . /root/.gvm/scripts/gvm && \
       gvm install go1.4 && \
-      gvm use go1.4 && \
-      gvm install go1.5 && \
-      gvm install go1.6 && \
-      gvm install go1.7
+      gvm use go1.4 && \\
+      gvm install go1.11
 
-ENV WATCHER_VERSION 0.2.4
+ENV WATCHER_VERSION 0.2.6
 
-ADD https://github.com/canthefason/go-watcher/releases/download/v${WATCHER_VERSION}/watcher-${WATCHER_VERSION}-linux-amd64 /root/.gvm/bin/watcher
+ADD https://github.com/daforester/go-watcher/releases/download/v${WATCHER_VERSION}/watcher-${WATCHER_VERSION}-linux-amd64 /root/.gvm/bin/watcher
 
 RUN chmod +x /root/.gvm/bin/watcher
 

@@ -7,6 +7,8 @@ package watcher
 import (
 	"log"
 	"os/exec"
+	"syscall"
+	"time"
 
 	"github.com/fatih/color"
 )
@@ -63,7 +65,21 @@ func (r *Runner) restart(fileName string) {
 
 func (r *Runner) kill(cmd *exec.Cmd) {
 	if cmd != nil {
-		cmd.Process.Kill()
+		_ = cmd.Process.Signal(syscall.SIGINT)
+
+		didExit := make(chan struct{})
+		go func() {
+			select {
+				case <-didExit:
+				case <-time.After(5 * time.Second):
+					_ = cmd.Process.Kill()
+			}
+		}()
+
+		state, err := cmd.Process.Wait()
+		if err == nil && state.Exited() {
+			close(didExit)
+		}
 	}
 }
 
