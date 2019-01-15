@@ -21,7 +21,7 @@ RUN . /root/.gvm/scripts/gvm && \
       gvm use go1.4 && \
       gvm install go1.11
 
-ENV WATCHER_VERSION 0.2.6
+ENV WATCHER_VERSION 0.2.7
 
 ADD https://github.com/daforester/go-watcher/releases/download/v${WATCHER_VERSION}/watcher-${WATCHER_VERSION}-linux-amd64 /root/.gvm/bin/watcher
 
