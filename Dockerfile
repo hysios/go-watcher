@@ -18,7 +18,7 @@ RUN curl -s -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/g
 
 RUN . /root/.gvm/scripts/gvm && \
       gvm install go1.4 && \
-      gvm use go1.4 && \\
+      gvm use go1.4 && \
       gvm install go1.11
 
 ENV WATCHER_VERSION 0.2.6
