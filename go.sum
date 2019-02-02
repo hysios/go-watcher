@@ -1,0 +1,12 @@
+github.com/daforester/go-watcher v0.2.7 h1:h0DcOpzqKB4xjGUkMR81fd/8oJbLQjV89mXlbvP/iHs=
+github.com/daforester/go-watcher v0.2.7/go.mod h1:64/5MRZgivNJe3py9OSfESh4hRwRlU3W/kXNcOAaBJ0=
+github.com/fatih/color v0.0.0-20161025120501-bf82308e8c85 h1:g7ijd5QIEMWwZNVp/T/6kQ8RSh8rN+YNhghMcrET3qY=
+github.com/fatih/color v0.0.0-20161025120501-bf82308e8c85/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=
+github.com/mattn/go-colorable v0.0.9 h1:UVL0vNpWh04HeJXV0KLcaT7r06gOH2l4OW6ddYRUIY4=
+github.com/mattn/go-colorable v0.0.9/go.mod h1:9vuHe8Xs5qXnSaW/c/ABM9alt+Vo+STaOChaDxuIBZU=
+github.com/mattn/go-isatty v0.0.4 h1:bnP0vzxcAdeI1zdubAl5PjU6zsERjGZb7raWodagDYs=
+github.com/mattn/go-isatty v0.0.4/go.mod h1:M+lRXTBqGeGNdLjl/ufCoiOlB5xdOkqRJdNxMWT7Zi4=
+golang.org/x/sys v0.0.0-20161023150541-c200b10b5d5e h1:uau++4dmjGy3TuvPvRbhZHY+TQVsImIxtWY5HRh9eho=
+golang.org/x/sys v0.0.0-20161023150541-c200b10b5d5e/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
+gopkg.in/fsnotify.v1 v1.4.2 h1:AwZiD/bIUttYJ+n/k1UwlSUsM+VSE6id7UAnSKqQ+Tc=
+gopkg.in/fsnotify.v1 v1.4.2/go.mod h1:Tz8NjZHkW78fSQdbUxIjBTcgA1z1m8ZHf0WmKUhAMys=

@@ -179,7 +179,7 @@ func (w *Watcher) addFolder(name string) {
 }
 
 // prepareRootDir prepares working directory depending on root directory
-func (w *Watcher) prepareRootDir() (string, error) {
+func (w *Watcher) prepareRootDir() (root string, err error) {
 	if w.rootdir == "" {
 		return os.Getwd()
 	}
@@ -189,7 +189,13 @@ func (w *Watcher) prepareRootDir() (string, error) {
 		return "", ErrPathNotSet
 	}
 
-	root := fmt.Sprintf("%s/src/%s", path, w.rootdir)
+	if _, err := os.Stat(filepath.Join(w.rootdir, "go.mod")); os.IsNotExist(err) {
+		root = fmt.Sprintf("%s/src/%s", path, w.rootdir)
+	} else {
+		if root, err = filepath.Abs(w.rootdir); err != nil {
+			return "", err
+		}
+	}
 
 	return root, nil
 }

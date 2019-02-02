@@ -56,6 +56,9 @@ func (b *Builder) Build(p *Params) {
 		}
 		log.Println("build completed")
 
+		if err := os.Chmod(fileName, (OS_USER_RWX | OS_ALL_R)); err != nil {
+			log.Fatal(err)
+		}
 		// and start the new process
 		b.runner.restart(fileName)
 	}
